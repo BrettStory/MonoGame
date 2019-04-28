@@ -4,14 +4,12 @@
 
 using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace MGCB
 {
     class Program
     {
-        static int Main(string[] args)
+        internal static int Main(string[] args)
         {
             // We force all stderr to redirect to stdout
             // to avoid any out of order console output.

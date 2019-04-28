@@ -49,6 +49,8 @@ namespace MGCB
 
         public void Write(string filePath)
         {
+            var directory = Path.GetDirectoryName(filePath);
+            Directory.CreateDirectory(directory);
             var serializer = new XmlSerializer(typeof(SourceFileCollection));
             using (var textWriter = new StreamWriter(filePath, false, new UTF8Encoding(false)))
                 serializer.Serialize(textWriter, this);            
