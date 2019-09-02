@@ -471,6 +471,30 @@ namespace Microsoft.Xna.Framework.Content
 		    loadedAssets.Clear();
 		}
 
+        public virtual void Unload(string assetName) {
+            if (string.IsNullOrEmpty(assetName)) {
+                throw new ArgumentNullException(nameof(assetName));
+            }
+            if (disposed) {
+                throw new ObjectDisposedException("ContentManager");
+            }
+
+            // On some platforms, name and slash direction matter.
+            // We store the asset by a /-seperating key rather than how the
+            // path to the file was passed to us to avoid
+            // loading "content/asset1.xnb" and "content\\ASSET1.xnb" as if they were two 
+            // different files. This matches stock XNA behavior.
+            // The dictionary will ignore case differences
+            var key = assetName.Replace('\\', '/');
+            if (loadedAssets.TryGetValue(key, out var asset)) {
+                if (asset is IDisposable disposable) {
+                    disposableAssets.Remove(disposable);
+                }
+
+                loadedAssets.Remove(key);
+            }
+        }
+
 		public string RootDirectory
 		{
 			get
